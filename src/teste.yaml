@@ -1,0 +1,7 @@
+table_name: "stately-lodge-369614.gcp_dev.mercantil_framework"
+primary_key: "id"
+incremental_field: "disponibilidade"
+columns:
+  - id
+  - nome
+  - disponibilidade
