@@ -3,7 +3,7 @@ from utils.bq_handler import BigQueryHandler
 
 
 def main():
-    x = YamlHandler("/root/PROJECTS/ingest_framework/src/teste.yaml")
+    x = YamlHandler("/root/PROJETOS/ingest_framework/src/teste.yaml")
     vars = x.parse_file_into_dict()
 
     query = f"""
