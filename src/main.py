@@ -1,17 +1,16 @@
-from utils.yaml_handler import YamlHandler
-from utils.bq_handler import BigQueryHandler
-from utils.database_handler import DBHandler
+from handler_factory import get_handler
+from yaml_reader import YamlReader
 
 
 def main():
-    x = YamlHandler("/root/PROJETOS/ingest_framework/src/teste.yaml")
+    x = YamlReader("/root/PROJETOS/ingest_framework/src/teste.yaml")
     vars = x.parse_file_into_dict()
 
     query = f"""
         SELECT {", ".join(vars.get("columns"))} FROM `{vars.get("table_name")}`
     """
 
-    bq = BigQueryHandler()
+    bq = get_handler("bigquery")
 
     result = bq.query_table(query)
 

@@ -20,7 +20,7 @@ class DBHandler:
 
     def __create_engine(self) -> Engine:
         engine = create_engine(
-            "postgresql+psycopg2://ingest_user:123@postgres:5432/ingest_bq"
+            self.uri_connection
         )
         return engine
 

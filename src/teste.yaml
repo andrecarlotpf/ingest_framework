@@ -1,4 +1,6 @@
+origem: "bigquery"
 table_name: "stately-lodge-369614.gcp_dev.mercantil_framework"
+credentials
 primary_key: "id"
 incremental_field: "disponibilidade"
 columns:
