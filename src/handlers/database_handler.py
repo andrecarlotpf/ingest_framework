@@ -19,9 +19,7 @@ class DBHandler:
         print(self.uri_connection)
 
     def __create_engine(self) -> Engine:
-        engine = create_engine(
-            self.uri_connection
-        )
+        engine = create_engine(self.uri_connection)
         return engine
 
     def execute_query(self, query: str) -> pd.DataFrame:

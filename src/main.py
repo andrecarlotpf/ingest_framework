@@ -10,13 +10,17 @@ def main():
         SELECT {", ".join(vars.get("columns"))} FROM `{vars.get("table_name")}`
     """
 
-    bq = get_handler("bigquery", **{"CREDENTIALS_PATH": "/root/PROJETOS/ingest_framework/bigquery-connector.json"})
+    bq = get_handler(
+        "bigquery",
+        **{
+            "CREDENTIALS_PATH": "/root/PROJETOS/ingest_framework/bigquery-connector.json"
+        },
+    )
 
     result = bq.query_table(query)
 
     for row in result:
         print(row)
-
 
 
 if __name__ == "__main__":

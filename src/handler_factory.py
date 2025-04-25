@@ -1,6 +1,7 @@
 from enum import Enum
 from handlers import DBHandler, BigQueryHandler
 
+
 class HandlerType(Enum):
     BIGQUERY = BigQueryHandler
     DATABASE = DBHandler
