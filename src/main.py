@@ -10,7 +10,7 @@ def main():
         SELECT {", ".join(vars.get("columns"))} FROM `{vars.get("table_name")}`
     """
 
-    bq = get_handler("bigquery")
+    bq = get_handler("bigquery", **{"CREDENTIALS_PATH": "/root/PROJETOS/ingest_framework/bigquery-connector.json"})
 
     result = bq.query_table(query)
 
