@@ -1,5 +1,6 @@
 from utils.yaml_handler import YamlHandler
 from utils.bq_handler import BigQueryHandler
+from utils.database_handler import DBHandler
 
 
 def main():
@@ -16,6 +17,7 @@ def main():
 
     for row in result:
         print(row)
+
 
 
 if __name__ == "__main__":
