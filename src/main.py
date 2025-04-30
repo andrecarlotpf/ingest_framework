@@ -1,27 +1,14 @@
-from handler_factory import get_handler
 from yaml_reader import YamlReader
+from query_factory import generate_sql_origin_bq
 
 
-def main():
-    x = YamlReader("/root/PROJETOS/ingest_framework/src/teste.yaml")
+def main(yaml_path: str):
+    x = YamlReader(yaml_path)
     vars = x.parse_file_into_dict()
 
-    query = f"""
-        SELECT {", ".join(vars.get("columns"))} FROM `{vars.get("table_name")}`
-    """
+    generate_sql_origin_bq(**vars)
 
-    bq = get_handler(
-        "bigquery",
-        **{
-            "CREDENTIALS_PATH": "/root/PROJETOS/ingest_framework/bigquery-connector.json"
-        },
-    )
-
-    result = bq.query_table(query)
-
-    for row in result:
-        print(row)
-
-
+    
 if __name__ == "__main__":
-    main()
+    path = "/root/PROJETOS/ingest_framework/src/teste.yaml"
+    main(path)

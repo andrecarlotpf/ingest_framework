@@ -1,0 +1,8 @@
+SELECT 
+    {% for column in columns %}
+    {{ column }}{% if not loop.last %},{% endif %}
+{% endfor %}
+FROM
+    `{{ table_name }}`
+WHERE
+    {{ filter_column }} = '{{ filter_value }}'
