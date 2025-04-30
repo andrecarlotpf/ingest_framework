@@ -1,4 +1,6 @@
 from jinja2 import Environment, FileSystemLoader
+from google.cloud import storage
+from google.oauth2 import service_account
 
 def generate_sql_origin_bq(**kwargs):
     vars = kwargs
@@ -19,3 +21,12 @@ def generate_sql_origin_bq(**kwargs):
         f.write(query)
 
     return path
+
+def send_file_to_gcs(file_path, credentials):
+    client = storage.Client(
+            credentials=credentials, project=credentials.project_id
+        )
+    bucket = client.bucket("ingest_framework")
+
+    blob = bucket.blob(f"config/query/origin/{file_path.split("/")[-1]}")
+    blob.upload_from_filename(file_path)
