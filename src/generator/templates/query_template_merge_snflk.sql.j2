@@ -1,0 +1,23 @@
+MERGE INTO {{ target_table }} AS TARGET
+USING (
+    SELECT
+    {% for col_name, col_type in columns.items() %}
+        CAST(TRIM(QUERY_ALIAS.${{ loop.index }}) AS {{ col_type }}) AS {{ col_name }}{% if not loop.last %},{% endif %}
+    {% endfor %}
+    FROM {{ table_name }} AS QUERY_ALIAS
+) AS SOURCE
+ON TARGET.{{ primary_key }} = SOURCE.{{ primary_key }}
+WHEN MATCHED THEN
+    UPDATE SET
+    {% for col_name in columns.keys() %}
+        TARGET.{{ col_name }} = SOURCE.{{ col_name }}{% if not loop.last %},{% endif %}
+    {% endfor %}
+WHEN NOT MATCHED THEN
+    INSERT (
+        {{ columns.keys() | join(', ') }}
+    )
+    VALUES (
+        {% for col_name in columns.keys() %}
+            SOURCE.{{ col_name }}{% if not loop.last %},{% endif %}
+        {% endfor %}
+    );

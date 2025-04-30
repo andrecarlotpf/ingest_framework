@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class Loader(ABC):
     def __init__(self, **kwargs):
         print("Super")
@@ -8,7 +9,7 @@ class Loader(ABC):
     def load(self):
         """Logic to handle the load"""
         return
-    
+
 
 class IncrementalLoader(Loader):
     def __init__(self, **kwargs):

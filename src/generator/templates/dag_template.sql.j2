@@ -1,0 +1,33 @@
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from datetime import datetime, timedelta
+
+default_args = {
+    'owner': '{{ owner }}',
+    'depends_on_past': False,
+    'email_on_failure': False,
+    'email_on_retry': False,
+    'retries': {{ retries }},
+    'retry_delay': timedelta(minutes={{ retry_delay_minutes }}),
+}
+
+with DAG(
+    dag_id='{{ dag_id }}',
+    default_args=default_args,
+    description='{{ description }}',
+    schedule_interval='{{ schedule_interval }}',
+    start_date=datetime({{ start_year }}, {{ start_month }}, {{ start_day }}),
+    catchup={{ catchup }},
+    tags={{ tags }},
+) as dag:
+
+    def sample_task(**kwargs):
+        print("Running task...")
+
+    task = PythonOperator(
+        task_id='{{ task_id }}',
+        python_callable=sample_task,
+        provide_context=True
+    )
+
+    task

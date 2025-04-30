@@ -11,3 +11,6 @@ wheels/
 
 # Credentials
 bigquery-connector.json
+
+# SQL files
+*.sql
