@@ -21,5 +21,5 @@ def main(yaml_path: str):
     generate_sql_merge_snowflake(**vars)
     
 if __name__ == "__main__":
-    path = "/root/PROJETOS/ingest_framework/src/teste.yaml"
+    path = "/root/repos/ingest_framework/src/teste.yaml"
     main(path)
