@@ -1,0 +1,32 @@
+from airflow import DAG
+from airflow.providers.docker.operators.docker import DockerOperator
+from datetime import datetime
+
+default_args = {
+    'owner': '{{owner}}',
+    'start_date': '{{start_date}}',
+    'retries': 0
+}
+
+with DAG(
+    dag_id='{{dag_id}}',
+    schedule_interval='{{schedule_interval}}',
+    default_args=default_args,
+    catchup=False,
+    description= '{{description}}',
+    tags={{ tags }}
+) as dag:
+
+    run_container = DockerOperator(
+        task_id='{{task_id}}',
+        image='{{image_name}}', 
+        api_version='auto',
+        auto_remove=True,
+        command=None,
+        docker_url='{{docker_url}}',
+        network_mode='bridge',
+        mount_tmp_dir=False,
+        environment={{yaml_params}},
+    )
+
+run_container

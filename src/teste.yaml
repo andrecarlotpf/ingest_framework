@@ -1,7 +1,8 @@
-origem: "bigquery"
+source: "bigquery"
 table_name: "stately-lodge-369614.gcp_dev.mercantil_framework"
 primary_key: "id"
 incremental_field: "disponibilidade"
+tags: ['docker', 'airflow']
 columns:
   id: STRING
   nome: STRING

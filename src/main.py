@@ -1,10 +1,11 @@
 from yaml_reader import YamlReader
-from generator.query_generator import (
+from generator.file_generator import (
     generate_sql_origin_bq,
     generate_sql_merge_snowflake,
+    generate_dag_ingest
 )
 from google.cloud import storage
-
+import os
 def send_file_to_gcs(file_path, credentials):
     client = storage.Client(credentials=credentials, project=credentials.project_id)
     # TODO change bucket name to get from ENV vars
@@ -18,8 +19,9 @@ def send_file_to_gcs(file_path, credentials):
 def main(yaml_path: str):
     x = YamlReader(yaml_path)
     vars = x.parse_file_into_dict()
-    generate_sql_merge_snowflake(**vars)
+    generate_dag_ingest(**vars)
     
 if __name__ == "__main__":
-    path = "/root/repos/ingest_framework/src/teste.yaml"
-    main(path)
+    #path = "/root/repos/ingest_framework/src/teste.yaml"
+    #main(path)
+    print(os.environ['source'])

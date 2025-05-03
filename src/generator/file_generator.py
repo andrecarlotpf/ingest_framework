@@ -1,5 +1,5 @@
 from jinja2 import Environment, FileSystemLoader
-
+from datetime import datetime
 # TODO change paths to ENV variables
 
 def generate_sql_origin_bq(**kwargs):
@@ -54,24 +54,20 @@ def generate_sql_merge_snowflake(**kwargs):
 
 
 def generate_dag_ingest(**kwargs):
-    env = Environment(loader=FileSystemLoader("/root/PROJETOS/ingest_framework/src/generator/templates"))
+    env = Environment(loader=FileSystemLoader("/root/repos/ingest_framework/src/generator/templates"))
     template = env.get_template("dag_template.py.j2")
 
     output = template.render(
-        dag_id="example_dag",
         owner="data_engineer",
-        retries=1,
-        retry_delay_minutes=5,
-        description="Example DAG generated from template",
+        start_date=str(datetime.now()),
+        dag_id="example_dag",
         schedule_interval="@daily",
-        start_year=2024,
-        start_month=1,
-        start_day=1,
-        catchup=False,
-        tags=["example", "auto"],
-        task_id="print_task"
+        description="Example DAG generated from template",
+        tags=[kwargs.get('source')]+kwargs.get('tags'),
+        yaml_params=kwargs,
+        task_id=f"ingest_{kwargs.get('table_name')}"
     )
 
     # Save to a .py file or print
-    with open("dags/generated_dag.py", "w") as f:
+    with open("./dags/generated_dag.py", "w") as f:
         f.write(output)
