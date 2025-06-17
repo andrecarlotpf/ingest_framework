@@ -1,21 +1,16 @@
 from google.cloud import bigquery
 from google.oauth2 import service_account
-
+import pandas as pd
 
 class BigQueryHandler:
     def __init__(self, **kwargs):
-        key_path = kwargs.get("CREDENTIALS_PATH")
-        credentials = service_account.Credentials.from_service_account_file(key_path)
+        self.table_name = kwargs.get('table_name')
 
-        self.client = bigquery.Client(
-            credentials=credentials, project=credentials.project_id
-        )
+    def query_table(self, credentials):
+        query = f"SELECT * FROM `{self.table_name}`;"
 
-    def query_table(self, query: str):
-        query_job = self.client.query(query)
-        rows = query_job.result()
-
-        return rows
+        df = pd.read_gbq(query, credentials=credentials, project_id=credentials.project_id)
+        return df
 
     def query_incremental(self):
         pass

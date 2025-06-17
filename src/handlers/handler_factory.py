@@ -7,9 +7,9 @@ class HandlerType(Enum):
     DATABASE = DBHandler
 
 
-def get_handler(handler_type: str, **kwargs):
+def get_handler(**kwargs):
     try:
-        handler_class = HandlerType[handler_type.upper()].value
+        handler_class = HandlerType[kwargs.get('source').upper()].value
         return handler_class(**kwargs)
     except KeyError:
-        raise ValueError(f"Handler Type {handler_type} does not exists.")
+        raise ValueError(f"Handler Type {kwargs.get('source')} does not exists.")

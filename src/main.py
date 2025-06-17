@@ -1,27 +1,38 @@
 from yaml_reader import YamlReader
-from generator.file_generator import (
-    generate_sql_origin_bq,
-    generate_sql_merge_snowflake,
-    generate_dag_ingest
-)
+from handlers.handler_factory import get_handler
 from google.cloud import storage
+from google.oauth2 import service_account
+import yaml
 import os
-def send_file_to_gcs(file_path, credentials):
-    client = storage.Client(credentials=credentials, project=credentials.project_id)
-    # TODO change bucket name to get from ENV vars
-    bucket = client.bucket("ingest_framework")
-    # TODO change blob path to get from ENV vars
-    blob = bucket.blob(f"config/query/origin/{file_path.split('/')[-1]}")
+import pandas as pd
+
+# Pegar as configuracoes da GCP
+key_path = '/root/repos/ingest_framework/bigquery-connector.json'
+
+def get_gcp_credentials():
+    return service_account.Credentials.from_service_account_file(key_path)
+def get_config(bucket_name, path):
     
-    blob.upload_from_filename(file_path)
+    credentials = get_gcp_credentials()
+
+    client = storage.Client(
+        credentials=credentials, project=credentials.project_id
+    )
+
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(path)
+    content = blob.download_as_bytes()
 
 
-def main(yaml_path: str):
-    x = YamlReader(yaml_path)
-    vars = x.parse_file_into_dict()
-    generate_dag_ingest(**vars)
-    
-if __name__ == "__main__":
-    #path = "/root/repos/ingest_framework/src/teste.yaml"
-    #main(path)
-    print(os.environ['source'])
+    py_object = yaml.safe_load(content)
+    return py_object # dict
+
+# Criar o handler do tipo de ingestao
+
+configs = get_config('ingest_framework', 'config/mercantil_framework/config.yaml')
+
+handler = get_handler(**configs)
+
+credentials = get_gcp_credentials()
+result = handler.query_table(credentials)
+print(result)
