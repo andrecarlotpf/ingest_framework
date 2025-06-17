@@ -7,7 +7,7 @@ import os
 import pandas as pd
 
 # Pegar as configuracoes da GCP
-key_path = '/root/repos/ingest_framework/bigquery-connector.json'
+key_path = ''
 
 def get_gcp_credentials():
     return service_account.Credentials.from_service_account_file(key_path)
